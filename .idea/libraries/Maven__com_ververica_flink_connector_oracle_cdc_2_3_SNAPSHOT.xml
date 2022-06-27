@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.ververica:flink-connector-oracle-cdc:2.3-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://E:/maven/repository/com/ververica/flink-connector-oracle-cdc/2.3-SNAPSHOT/flink-connector-oracle-cdc-2.3-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://E:/maven/repository/com/ververica/flink-connector-oracle-cdc/2.3-SNAPSHOT/flink-connector-oracle-cdc-2.3-SNAPSHOT-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://E:/maven/repository/com/ververica/flink-connector-oracle-cdc/2.3-SNAPSHOT/flink-connector-oracle-cdc-2.3-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

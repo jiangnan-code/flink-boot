@@ -5,5 +5,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans.xsd        http://code.alibabatech.com/schema/dubbo        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
     <!---此为会员版功能：添加微信 intsmaze，付款36.9元即可获得全套会员版的配置文件。-->
+    <dubbo:application name="consumer-of-helloworld-app"  />
 
+    <dubbo:registry protocol="zookeeper" address="127.0.0.1:2181 "/>
+
+    <dubbo:reference id="dubboService" interface="com.intsmaze.dubbo.provider.DubboService" />
 </beans>

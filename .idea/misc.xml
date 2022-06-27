@@ -19,10 +19,18 @@
         <option value="$PROJECT_DIR$/flink-other-service/pom.xml" />
         <option value="$PROJECT_DIR$/flink-dubbo-consumer/pom.xml" />
         <option value="$PROJECT_DIR$/flink-drpc/pom.xml" />
+        <option value="$PROJECT_DIR$/flink-hbase/pom.xml" />
+        <option value="$PROJECT_DIR$/flink-utils/pom.xml" />
       </list>
     </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/flink-other-service/dubbo.consumer/pom.xml" />
+        <option value="$PROJECT_DIR$/flink-other-service/dubbo.provider/pom.xml" />
+      </set>
+    </option>
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

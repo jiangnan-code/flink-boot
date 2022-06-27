@@ -12,6 +12,8 @@ import org.apache.flink.contrib.streaming.state.PredefinedOptions;
 import org.apache.flink.contrib.streaming.state.RocksDBOptions;
 import org.apache.flink.contrib.streaming.state.RocksDBStateBackend;
 import org.apache.flink.runtime.state.StateBackend;
+import org.apache.flink.runtime.state.hashmap.HashMapStateBackend;
+import org.apache.flink.runtime.state.storage.JobManagerCheckpointStorage;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -61,14 +63,19 @@ public abstract class BaseFlink {
      * @date: 2020/10/15 18:33
      */
     public void init(ParameterTool params) throws IOException {
-        env = StreamExecutionEnvironment.getExecutionEnvironment();
+        Configuration configuration = new Configuration();
+        String savepointPath = params.get("savepointPath");
+        if (StringUtils.isNotBlank(savepointPath)) {
+            configuration.setString("execution.savepoint.path",savepointPath);
+        }
+        this.properties = PropertiesUtils.getProperties(getPropertiesName());
+        configuration.addAllToProperties(properties);
+        env = StreamExecutionEnvironment.getExecutionEnvironment(configuration);
         settings = EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
         tableEnv = StreamTableEnvironment.create(env, settings);
 
 
-        this.properties = PropertiesUtils.getProperties(getPropertiesName());
-        Configuration configuration = new Configuration();
-        configuration.addAllToProperties(properties);
+
         env.getConfig().setGlobalJobParameters(configuration);
 
         String parallelism = params.get("parallelism");
@@ -96,17 +103,32 @@ public abstract class BaseFlink {
 
         String isLocal = params.get("isLocal");
         if (StringUtils.isBlank(isLocal)) {
+            System.setProperty("HADOOP_USER_NAME", "root");
             String isIncremental = params.get("isIncremental");
+            if(isIncremental==null){
+                isIncremental = "local";
+            }
             Preconditions.checkNotNull(isIncremental, "isIncremental is null");
             RocksDBStateBackend stateBackend;
             String hadoopIp = properties.getProperty("hadoopIp");
             if ("isIncremental".equals(isIncremental)) {
                 //如果本地调试，必须指定hdfs的端口信息，且要依赖hadoop包，如果集群执行，flink与hdfs在同一集群，那么可以不指定hdfs端口信息，也不用将hadoop打进jar包。
-                stateBackend = new RocksDBStateBackend("hdfs:///home/intsmaze/flink/" + getJobName(), true);
+                stateBackend = new RocksDBStateBackend("hdfs://" + hadoopIp + "/home/intsmaze/flink/" + getJobName(), true);
                 env.setStateBackend(stateBackend);
             } else if ("full".equals(isIncremental)) {
                 stateBackend = new RocksDBStateBackend("hdfs://" + hadoopIp + "/home/intsmaze/flink/" + getJobName(), false);
                 env.setStateBackend(stateBackend);
+            } else if ("local".equals(isIncremental)) {
+//                stateBackend = new RocksDBStateBackend("file:///e:/flink-log/", true);
+                String system = properties.getProperty("system");
+                String filePath = "";
+                if ("linux".equals(system)) {
+                    filePath = properties.getProperty("filePath-linux");
+                }else{
+                    filePath = properties.getProperty("filePath-windows");
+                }
+                env.setStateBackend(new HashMapStateBackend());
+                env.getCheckpointConfig().setCheckpointStorage(filePath);
             }
 
             env.enableCheckpointing(5000);

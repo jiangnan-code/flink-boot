@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.intsmaze.flink.client</groupId>
   <artifactId>flink-client</artifactId>
-  <version>1.0</version>
+  <version>1.12</version>
   <build>
     <plugins>
       <plugin>
@@ -26,6 +26,17 @@
                   </excludes>
                 </filter>
               </filters>
+              <transformers>
+                <transformer>
+                  <mainClass>com.intsmaze.flink.client.OracleCDC</mainClass>
+                </transformer>
+                <transformer>
+                  <resource>META-INF/spring.handlers</resource>
+                </transformer>
+                <transformer>
+                  <resource>META-INF/spring.schemas</resource>
+                </transformer>
+              </transformers>
             </configuration>
           </execution>
         </executions>
@@ -40,5 +51,18 @@
       </plugin>
     </plugins>
   </build>
+  <dependencies>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.24</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+  <properties>
+    <hutool.version>5.7.15</hutool.version>
+    <scala.version>2.12</scala.version>
+    <flink.version>1.13.0</flink.version>
+  </properties>
 </project>
 

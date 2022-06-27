@@ -46,7 +46,6 @@ public abstract class CommonFunction extends RichFlatMapFunction<String, String>
         ExecutionConfig.GlobalJobParameters globalJobParameters = getRuntimeContext()
                 .getExecutionConfig().getGlobalJobParameters();
         beanFactory = BeanFactory.getBeanFactory((Configuration) globalJobParameters);
-
         dataService = beanFactory.getBean(DataService.class);
     }
 
